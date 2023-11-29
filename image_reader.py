@@ -11,7 +11,7 @@ import os
 # if aws_access_key_id is None or aws_secret_access_key is None:
 #     raise ValueError("AWS credentials are missing. Please check your .env file.")
 
-'''to acces a file in the bucket 
+'''to access a file in the bucket 
 s3.Bucket('Bucket_name').Object('file name').get()
 to show all the object sin the bucket we do
 s3.Bucket("Bucket_name").objects.all()
@@ -26,5 +26,10 @@ s3 = boto3.resource(
     aws_secret_access_key = 'JrhLtIFx3UFG9EVQTfJiGLKdeXsbDQkQt67MFoPD'
     )
 
+image_names = []
 for obj in s3.Bucket('team5adm').objects.all():
-    print(obj)
+    image_names.append(obj.key)
+
+with open('image_path.txt', 'w') as file:
+    for element in image_names:
+        file.write(f"{element}\n")
