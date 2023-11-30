@@ -3,7 +3,8 @@ import openai
 import base64
 import requests
 import json
-from prompts import products
+from keys import keys
+from prompts import tagger
 
 # Function to encode a single image
 def encode_image(image_path):
@@ -11,8 +12,8 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 # Set the OpenAI API key from environment variables
-openai.api_key = os.environ['OPENAI_API_KEY']
-
+openai.api_key = keys()
+print(openai.api_key)
 # Filename to save responses
 filename = 'responses.json'
 
@@ -40,10 +41,13 @@ def save_response_content(image_name, content):
             json.dump([data], file, indent=4)
 
 # Folder path containing images
-folder_path = "Products"
+folder_path = "new_dataset"
 
 # Iterate over images in the folder
+count=0
 for image_filename in os.listdir(folder_path):
+    if count==2:
+        break
     if image_filename.endswith(('.jpg', '.jpeg', '.png')):
         image_path = os.path.join(folder_path, image_filename)
         base64_image = encode_image(image_path)
@@ -59,7 +63,7 @@ for image_filename in os.listdir(folder_path):
         # The text content remains the same
         text_content = {
             "type": "text",
-            "text": products
+            "text": tagger
         }
 
         # Combine the text content with the image contents
@@ -102,4 +106,6 @@ for image_filename in os.listdir(folder_path):
             print(f"Failed to get a successful response for {image_filename}. Status code: {response.status_code}")
             print("Full response:")
             print(response.text)
+
+        count+=1
 
