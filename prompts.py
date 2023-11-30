@@ -22,7 +22,7 @@ tagger = (
     "\n    {\"tag\": \"Neckline\", \"value\": \"\"},"
     "\n    {\"tag\": \"Sleeve Length\", \"value\": \"\"},"
     "\n    {\"tag\": \"Closure Type\", \"value\": \"\"},"
-    "\n    {\"tag\": \"Gender\", \"value\": \"\"},"
+    "\n    {\"tag\": \"Gender\", \"value\": \"{Male/Female}\"},"
     "\n    {\"tag\": \"Collar Type\", \"value\":\"\"}"
     "\n  ]"
     "\n}\\n"
