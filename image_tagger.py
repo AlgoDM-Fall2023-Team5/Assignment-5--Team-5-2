@@ -20,7 +20,7 @@ filename = 'responses.json'
 # Function to save response content
 def save_response_content(image_name, content):
     data = {
-        "image": image_name,
+        "image": f"new_dataset_assignment_5/new_dataset/{image_name}" ,
         "response_content": content
     }
 
