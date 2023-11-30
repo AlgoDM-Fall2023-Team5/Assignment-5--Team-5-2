@@ -7,9 +7,6 @@ tagger = (
     "You need to consider only on upper garment and do not return any text except json file. Be accurate and precise"
  
     "\n{"
-    "\n  \"image\": {"
-    "\n    \"url\": \"\""
-    "\n  },"
     "\n  \"annotations\": ["
     "\n    {\"tag\": \"Clothing Type\", \"value\": \"\"},"
     "\n    {\"tag\": \"Color\", \"value\": \"\"},"
