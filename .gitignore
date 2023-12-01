@@ -7,3 +7,4 @@ new_dataset_maker.py
 .env
 my_file.txt
 keys.py
+image_reader.py
