@@ -2,12 +2,12 @@ import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
 
 # Snowflake connection parameters
-snowflake_user = 'your_username'
-snowflake_password = 'your_password'
-snowflake_account = 'your_account_url'
-snowflake_database = 'your_database'
-snowflake_schema = 'your_schema'
-snowflake_warehouse = 'your_warehouse'
+snowflake_user = 'shirish'
+snowflake_password = 'Northeastern123'
+snowflake_account = 'PXTNTMC-FTB58373'
+snowflake_database = 'CLOTHING_TAGS'
+snowflake_schema = 'PUBLIC'
+snowflake_warehouse = 'COMPUTE_WH'
 
 # Create a Snowflake connection
 conn = snowflake.connector.connect(
@@ -20,7 +20,7 @@ conn = snowflake.connector.connect(
 )
 
 # Assuming your table name is 'your_table'
-table_name = 'your_table'
+table_name = 'Tags'
 
 # Use the write_pandas function to upsert the DataFrame into Snowflake
 write_pandas(conn, df, table_name)
