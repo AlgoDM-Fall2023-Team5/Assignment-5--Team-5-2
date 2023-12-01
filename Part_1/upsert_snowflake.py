@@ -1,5 +1,9 @@
 import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
+import pandas as pd
+
+
+df=pd.read_csv("tags.csv")
 
 # Snowflake connection parameters
 snowflake_user = 'shirish'
