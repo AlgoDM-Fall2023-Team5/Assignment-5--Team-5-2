@@ -8,6 +8,10 @@ from llama_index import StorageContext
 import pinecone
 import snowflake.connector
 import boto3
+from PIL import Image
+import torch
+import clip
+from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
 
 # Set up Pinecone client
 pinecone.init(api_key="878f92d2-ce36-4be5-bbc0-05a56ff092fc")
@@ -35,10 +39,7 @@ def fetch_image_from_s3(bucket_name, key, region='us-east-2', aws_access_key_id=
 
 # Function to encode image using CLIP
 def encode_image_with_clip(image_path):
-    from PIL import Image
-    import torch
-    import clip
-    from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
+    
 
     # Load the pre-trained CLIP model
     device = "cuda" if torch.cuda.is_available() else "cpu"
