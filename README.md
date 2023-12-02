@@ -1,7 +1,7 @@
 # Assignment README 🚀
 
 ## Quick Links:🔎
-1. [Codelabs]()🔗
+1. [Codelabs](https://codelabs-preview.appspot.com/?file_id=1DqeVF-Jku3vJvP-UsvYoHPGV48PMDrGskG75TnHW-0E#0)🔗
 2. [Contribution Report:]()🔗
 3. [Video Recording:]()🔗
 
