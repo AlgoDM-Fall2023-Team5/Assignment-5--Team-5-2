@@ -2,7 +2,7 @@
 
 ## Quick Links:🔎
 1. [Codelabs](https://codelabs-preview.appspot.com/?file_id=1DqeVF-Jku3vJvP-UsvYoHPGV48PMDrGskG75TnHW-0E#0)🔗
-2. [Contribution Report:]()🔗
+2. [Contribution Report:](https://codelabs-preview.appspot.com/?file_id=17f3AljxG_ZCQNcpaP1X72_gD7EkphTqz4DM6K4sXrE0#0)🔗
 3. [Video Recording:]()🔗
 
 
