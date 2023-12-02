@@ -56,7 +56,7 @@ if uploaded_image is not None:
 
         # Convert the NumPy array to a list
         image_features_list = image_features.tolist()
-        st.write(image_features_list)
+        # st.write(image_features_list)
 
 
         closest_image_ids, images_from_s3 = search_and_display_images(image_features_list)
@@ -64,7 +64,7 @@ if uploaded_image is not None:
 
         annotations_result = get_annotations_for_images(closest_image_ids, conn, snowflake_table_name)
 
-
+        st.header("Annotations")
         st.write(annotations_result)
 
 
@@ -80,7 +80,7 @@ if uploaded_image is not None:
         # Create the output folder if it doesn't exist
         os.makedirs(output_folder_path, exist_ok=True)
 
-
+        st.header("Similar Images")
         for image_file in image_files:
             # Create the full path to the input image file
             input_image_path = os.path.join(image_folder_path, image_file)
