@@ -69,7 +69,7 @@ if uploaded_image is not None:
 
 
 
-        image_folder_path = r"D:\Projects\ADM Assg 5\Assignment-5--Team-5\images"
+        image_folder_path = "images"
 
 
         image_files = [f for f in os.listdir(image_folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
