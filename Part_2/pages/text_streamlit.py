@@ -39,7 +39,7 @@ else:
     image_features = torch.from_numpy(image_features).to(device)
 
 # Streamlit app
-st.title("Image Search using CLIP")
+st.title("Image Search using Text Input")
 
 # Input search query
 search_query = st.sidebar.text_input("Enter a search query", 'T shirt')
