@@ -14,7 +14,7 @@ import clip
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
 
 # Set up Pinecone client
-pinecone.init(api_key="878f92d2-ce36-4be5-bbc0-05a56ff092fc")
+pinecone.init(api_key="7f78befa-055d-41ac-a90a-cff6a5282d66")
 pinecone_index = pinecone.Index(index_name="adm4")
 
 # Set up Snowflake connection
