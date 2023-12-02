@@ -1,9 +1,34 @@
-import snowflake.connector
 import streamlit as st
-from PIL import Image
 import requests
+from PIL import Image
+from io import BytesIO
+from sentence_transformers import SentenceTransformer
+import json  # Add this import
+import snowflake.connector
+import os
+from PIL import Image
 
-# Snowflake connection parameters
+
+
+from image_fetcher import search_and_display_images
+from image_to_image import get_annotations_for_images
+
+
+image_encoder = SentenceTransformer('clip-ViT-B-32')
+
+st.title("Image Similarity Search")
+
+uploaded_image = st.file_uploader("Choose an image...", type="jpg")
+
+def encode_image(uploaded_image, encoder):
+    image_bytes = uploaded_image.read()
+    image_pil = Image.open(BytesIO(image_bytes))
+
+    # Encode the image
+    image_input = encoder.encode(image_pil, convert_to_tensor=True)
+    image_features = image_input.flatten()
+
+    return image_features
 snowflake_role = 'ACCOUNTADMIN'
 snowflake_table_name = 'Tags'
 snowflake_user = 'shirish'
@@ -13,88 +38,73 @@ snowflake_database = 'CLOTHING_TAGS'
 snowflake_schema = 'PUBLIC'
 snowflake_warehouse = 'COMPUTE_WH'
 
-# Function to retrieve annotations for images
-def get_annotations_for_images(image_ids, conn, table_name):
-    annotations_list = []
+conn = snowflake.connector.connect(
+    user=snowflake_user,
+    password=snowflake_password,
+    account=snowflake_account,
+    warehouse=snowflake_warehouse,
+    database=snowflake_database,
+    role=snowflake_role
+)
 
-    try:
-        cursor = conn.cursor()
+if uploaded_image is not None:
+    if st.button("Find Similar Images"):
+        st.image(uploaded_image, caption="Uploaded Image.", use_column_width=True)
 
-        for image_id in image_ids:
-            try:
-                cursor.execute(f"SELECT annotations FROM {table_name} WHERE image = '{image_id}'")
-                result = cursor.fetchone()
+        # Encode the image
+        image_features = encode_image(uploaded_image, image_encoder)
 
-                if result:
-                    annotations_list.append({
-                        'image': image_id,
-                        'annotations': result[0]  # Assuming annotations is a column in your table
-                    })
-                else:
-                    print(f"No information found for image {image_id}")
-            except Exception as e:
-                print(f"Error retrieving information for image {image_id} from Snowflake: {str(e)}")
+        # Convert the NumPy array to a list
+        image_features_list = image_features.tolist()
+        st.write(image_features_list)
 
-    except Exception as e:
-        print(f"Error executing Snowflake query: {str(e)}")
 
-    return annotations_list
+        closest_image_ids, images_from_s3 = search_and_display_images(image_features_list)
+        st.write(closest_image_ids)
 
-# Function to search for similar images
-def search_similar_images(image_path):
-    # Replace with your Pinecone API key and index name
-    pinecone_api_key = '7f78befa-055d-41ac-a90a-cff6a5282d66'
-    index_name = 'adm4'
+        annotations_result = get_annotations_for_images(closest_image_ids, conn, snowflake_table_name)
 
-    # Convert image to binary data
-    with open(image_path, 'rb') as f:
-        image_data = f.read()
 
-    # Send search request to Pinecone
-    response = requests.post(
-        'https://api.pinecone.io/v2/indexes/{}/query?top=10'.format(index_name),
-        headers={'Authorization': 'Bearer {}'.format(pinecone_api_key)},
-        json={'data': image_data, 'vectors': 'image'})
+        st.write(annotations_result)
 
-    if response.status_code == 200:
-        similar_image_ids = response.json()['results']['ids']
-        return similar_image_ids
-    else:
-        print('Error retrieving similar images from Pinecone:', response.text)
-        return None
 
-# Initialize Streamlit app
-st.title('Image Similarity Search and Annotation Retrieval')
 
-# Upload image
-uploaded_image = st.file_uploader('Upload an image:', type='jpg')
+        image_folder_path = r"D:\Projects\ADM Assg 5\Assignment-5--Team-5\images"
 
-# Process image and retrieve annotations
-if uploaded_image:
-    # Display uploaded image
-    st.image(Image.open(uploaded_image))
 
-    # Search for similar images
-    similar_image_ids = search_similar_images(uploaded_image.name)
+        image_files = [f for f in os.listdir(image_folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
 
-    # Retrieve annotations for similar images
-    if similar_image_ids:
-        # Connect to Snowflake
-        conn = snowflake.connector.connect(
-            user=snowflake_user,
-            password=snowflake_password,
-            account=snowflake_account,
-            warehouse=snowflake_warehouse,
-            database=snowflake_database,
-            role=snowflake_role
-        )
+        # Output folder for converted images
+        output_folder_path = "/path/to/your/converted/images"
 
-        # Get annotations for similar images
-        annotations = get_annotations_for_images(similar_image_ids, conn, snowflake_table_name)
+        # Create the output folder if it doesn't exist
+        os.makedirs(output_folder_path, exist_ok=True)
 
-        # Display annotations
-        for annotation in annotations:
-            st.write(f"Image: {annotation['image']}")
-            st.write(f"Annotations: {annotation['annotations']}")
 
-st.stop()
+        for image_file in image_files:
+            # Create the full path to the input image file
+            input_image_path = os.path.join(image_folder_path, image_file)
+
+            # Determine the output image file path with the new format (JPEG)
+            output_image_file = os.path.splitext(image_file)[0] + ".jpeg"
+            output_image_path = os.path.join(output_folder_path, output_image_file)
+
+            # Open the input image
+            image = Image.open(input_image_path)
+
+            # Save the image in JPEG format
+            image.save(output_image_path, "JPEG")
+
+            # Close the image
+            image.close()
+
+            # Display the converted image using Streamlit
+            st.image(output_image_path, caption=output_image_file, use_column_width=True)
+
+
+
+
+
+
+
+
