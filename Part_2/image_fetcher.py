@@ -11,7 +11,7 @@ def search_and_display_images(image_vector):
   shutil.rmtree("images", ignore_errors=True)
 
   # Pinecone configuration
-  pinecone_api_key = "878f92d2-ce36-4be5-bbc0-05a56ff092fc"
+  pinecone_api_key = "7f78befa-055d-41ac-a90a-cff6a5282d66"
   index_name = "adm4"
 
   pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
