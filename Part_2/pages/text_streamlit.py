@@ -8,12 +8,12 @@ from PIL import Image
 
 # Load CLIP model
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device=device)
+# model, preprocess = clip.load("ViT-B/32", device=device)
 
 # Function to encode search query
 def encode_search_query(search_query):
     with torch.no_grad():
-        text_encoded = model.encode_text(clip.tokenize(search_query).to(device))
+        text_encoded = clip.load("ViT-B/32", device=device).encode_text(clip.tokenize(search_query).to(device))
         text_encoded /= text_encoded.norm(dim=-1, keepdim=True)
     return text_encoded
 
@@ -55,3 +55,4 @@ if st.sidebar.button("Search"):
     for j, image_id in enumerate(result_image_ids):
         image = Image.open(f'D:/Projects/ADM Assg 5/Assignment-5--Team-5/new_dataset/{image_id}.jpg')
         columns[j].image(image, caption=f"Image {j+1}")
+        
