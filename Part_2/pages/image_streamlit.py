@@ -117,6 +117,15 @@ if uploaded_image is not None:
             # Display the image in Streamlit
             st.image(image_bytes)
 
+        del uploaded_image
+        del image_features
+        del image_features_list
+        del closest_image_ids
+        del images_from_s3
+        del annotations_result
+        del s3_client
+        del img
+
 
 
 

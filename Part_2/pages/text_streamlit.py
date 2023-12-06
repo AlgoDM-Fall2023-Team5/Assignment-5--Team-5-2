@@ -69,4 +69,8 @@ if st.sidebar.button("Search"):
             #columns.image(image_bytes, caption=f"Image {i}", use_column_width=True)
         except s3_client.exceptions.NoSuchKey:
                 pass
+    
+    del image_features
+    del image_ids
+
         
