@@ -10,3 +10,4 @@ snowflake_connector_python==3.5.0
 snowflake_snowpark_python==1.8.0
 snowflake_sqlalchemy==1.5.0
 streamlit==1.26.0
+git+https://github.com/openai/CLIP.git
