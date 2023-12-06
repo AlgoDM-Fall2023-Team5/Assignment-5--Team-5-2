@@ -4,6 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 from PIL import Image
+import boto3
 
 
 # Load CLIP model
@@ -13,7 +14,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # Function to encode search query
 def encode_search_query(search_query):
     with torch.no_grad():
-        text_encoded = clip.load("ViT-B/32", device=device).encode_text(clip.tokenize(search_query).to(device))
+        text_encoded = clip.load("ViT-B/32", device=device)[0].encode_text(clip.tokenize(search_query).to(device))
         text_encoded /= text_encoded.norm(dim=-1, keepdim=True)
     return text_encoded
 
@@ -45,14 +46,27 @@ st.title("Image Search using Text Input")
 search_query = st.sidebar.text_input("Enter a search query", 'T shirt')
 
 # Number of results to display per query
-n_results_per_query = 5
+n_results_per_query = 5  
 
 if st.sidebar.button("Search"):
     result_image_ids = search(search_query, image_features, image_ids, n_results_per_query)
 
     st.text(search_query)
     columns = st.columns(n_results_per_query)
-    for j, image_id in enumerate(result_image_ids):
-        image = Image.open(f'D:/Projects/ADM Assg 5/Assignment-5--Team-5/new_dataset/{image_id}.jpg')
-        columns[j].image(image, caption=f"Image {j+1}")
+    s3_client = boto3.client(service_name = 's3',
+            aws_access_key_id='AKIAQ4WOK7VQVKP4WJVB',
+            aws_secret_access_key='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',
+            region_name = 'us-east-2')
+    
+
+    for i in result_image_ids:
+        st.write(i)
+    for i in result_image_ids:
+        try:
+            img = s3_client.get_object(Bucket='team5adm', Key=f'new_dataset_assignment_5/new_dataset/{i}.jpg')
+            image_bytes = img['Body'].read()
+            st.image(image_bytes)
+            #columns.image(image_bytes, caption=f"Image {i}", use_column_width=True)
+        except s3_client.exceptions.NoSuchKey:
+                pass
         
